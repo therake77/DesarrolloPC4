@@ -22,7 +22,7 @@ export default function Header({ user }: HeaderProps) {
       zIndex={10}
     >
       <Heading size="md" color="blue.600" letterSpacing="tight">
-        MyApp
+        PetPlatform
       </Heading>
 
       <Flex align="center" gap={4}>

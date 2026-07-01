@@ -59,6 +59,9 @@ export default function Sidebar({ navItems, active, onNavigate, user }: SidebarP
             <Text fontSize="xs" color="gray.500">
               {user.email}
             </Text>
+            <Text fontSize="xs" color="gray.500">
+              Rol: {user.role === "SOLIDARIO" ? "Cuidador Solidario" : user.role === "PROFESIONAL" ? "Profesional" : user.role === "ESPECIALIZADO" ? "Especializado" : "No definido"}
+            </Text>
           </Box>
         </Flex>
       </Box>

@@ -1,4 +1,5 @@
 from users.application.auth_facade import AuthFacade
+from users.domain.user import UserRole
 
 class RegisterUserUseCase:
 
@@ -10,10 +11,11 @@ class RegisterUserUseCase:
         ) -> None:
         self.facade = facade
 
-    async def execute( self, name: str, email : str, password: str ):
+    async def execute( self, name: str, email : str, password: str, role : UserRole ):
         await self.facade.register(
             name,
             email,
-            password
+            password,
+            role
         )
         return

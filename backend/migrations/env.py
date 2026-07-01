@@ -9,6 +9,7 @@ from alembic import context
 
 from shared.infrastructure.persistence.models.base_model import BaseSQLAlchemyModel
 from users.infrastructure.persistence.user import UserModel, UserCredentialsModel
+from alerts.infraestructure.persistence.models.alert import AlertModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

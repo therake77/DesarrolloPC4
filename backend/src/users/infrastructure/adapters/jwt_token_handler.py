@@ -9,7 +9,7 @@ from shared.infrastructure.config.config import settings
 class JwtTokenHandler(TokenHandler):
     
     def create_token(self, user : User) -> EncryptedToken:
-        now = datetime.datetime.now()
+        now = datetime.datetime.utcnow()
         exp = now + datetime.timedelta(minutes=settings.JWT_EXPIRE_TIME_IN_MINUTES)
         payload: dict[str, str | datetime.datetime] = {
             "sub" : str(user.uid.uid),

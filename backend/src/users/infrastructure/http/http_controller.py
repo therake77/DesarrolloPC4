@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from users.application.get_user import GetUserInfoUseCase, UserNoExistsException
+from users.application.get_user_notifications import GetUserNotificationsUseCase
+from users.infrastructure.http.dto.notification_dto import NotificationDto
 from users.infrastructure.http.dto.user_info import UserInfoDto
 
-from ..application_di.di import get_get_user_uc, get_login_user_uc, get_register_user_uc
+from ..application_di.di import get_get_notification_uc, get_get_user_uc, get_login_user_uc, get_register_user_uc
 from ...application.register_user import RegisterUserUseCase
 from .dto.register_dto import RegisterDto
 from ...application.auth_facade import UnauthorizedException, UnprocessableRegisterException, UserNotFoundException
@@ -21,7 +23,8 @@ async def get_user_info(user_id : int, use_case : GetUserInfoUseCase = Depends(g
         return UserInfoDto(
             id = db_user.uid.uid,
             name = db_user.name.name,
-            email = db_user.credentials.email.email
+            email = db_user.credentials.email.email,
+            role = db_user.role
         )
     
     except UserNoExistsException:
@@ -32,6 +35,25 @@ async def get_user_info(user_id : int, use_case : GetUserInfoUseCase = Depends(g
     except Exception as e:
         print(e.__str__())
         raise e
+
+@router.get("/notification/{user_id}")
+
+async def get_user_notifications(user_id : int, use_case : GetUserNotificationsUseCase = Depends(get_get_notification_uc)):
+    try:
+        notifications = await use_case.execute(user_id)
+
+        return [
+            NotificationDto(
+                alert_id=n.alert_id,
+                text=n.text
+            ) for n in notifications
+        ]
+    except Exception:
+        raise HTTPException(
+            status_code=422,
+            detail="Impossible to get notifications"
+        )
+
 
 @router.post(path="/login")
 async def login_user(body : LoginDto, use_case : LoginUserUseCase = Depends(get_login_user_uc)):
@@ -61,7 +83,8 @@ async def register_user(body : RegisterDto, use_case : RegisterUserUseCase = Dep
         await use_case.execute(
             body.name,
             body.email,
-            body.password
+            body.password,
+            body.role
         )
     except UnprocessableRegisterException:
         raise HTTPException(

@@ -1,5 +1,5 @@
 from shared.application.uow import UnitOfWork
-from users.domain.user import HashedPassword, User
+from users.domain.user import HashedPassword, User, UserRole
 
 from users.domain.user import UserCredentials, UserEmail, UserId, UserName
 from users.domain.user_repository import UserRepository
@@ -37,7 +37,7 @@ class AuthFacade:
 
         return self.token_handler.create_token(user)
 
-    async def register( self, name : str, email : str, password : str ) -> None:
+    async def register( self, name : str, email : str, password : str, role : UserRole ) -> None:
         
         hashed_password: HashedPassword = self.hash_provider.hash(password)
         try:
@@ -46,7 +46,8 @@ class AuthFacade:
                     User(
                         uid=UserId(0),
                         name=UserName(name),
-                        credentials=UserCredentials(UserEmail(email),hashed_password)
+                        credentials=UserCredentials(UserEmail(email),hashed_password),
+                        role=role
                     )
                 )
         except Exception as e:

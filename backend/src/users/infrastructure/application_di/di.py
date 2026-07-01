@@ -3,6 +3,7 @@ from fastapi import Depends
 
 from shared.application.uow import UnitOfWork
 from users.application.get_user import GetUserInfoUseCase
+from users.application.get_user_notifications import GetUserNotificationsUseCase
 from users.infrastructure.adapters.di import get_sql_user_repo
 from shared.infrastructure.adapters.di import get_sql_unit_of_work
 from shared.infrastructure.adapters.sql_uow import SQLUnitOfWork
@@ -47,4 +48,13 @@ async def get_get_user_uc(
     return GetUserInfoUseCase(
         user_repo,
         uow
+    )
+
+async def get_get_notification_uc(
+    user_repo : UserRepository = Depends(get_sql_user_repo),
+    uow : UnitOfWork = Depends(get_sql_unit_of_work) 
+):
+    return GetUserNotificationsUseCase(
+        uow,
+        user_repo
     )

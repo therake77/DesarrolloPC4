@@ -1,5 +1,12 @@
 
 from dataclasses import dataclass
+from enum import Enum
+
+ 
+class UserRole(Enum):
+    SOLIDARIO = "SOLIDARIO"
+    PROFESIONAL = "PROFESIONAL"
+    ESPECIALIZADO = "ESPECIALIZADO"
 
 @dataclass
 class UserEmail:
@@ -26,6 +33,7 @@ class UserName:
 class User:
     uid : UserId
     name : UserName
+    role : UserRole
     credentials : UserCredentials
 
 
