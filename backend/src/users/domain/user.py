@@ -27,3 +27,8 @@ class User:
     uid : UserId
     name : UserName
     credentials : UserCredentials
+
+
+@dataclass
+class Caretaker(User):
+    level : str
